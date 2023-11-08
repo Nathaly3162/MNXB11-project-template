@@ -1,15 +1,31 @@
-
 #include <iostream>
-int main(int argc, char *argv[]) {
-  std::cout << "I am just a code template, you need to implement the "
-               "functionality you want to use yourself!"
-            << std::endl;
+#include "argh.h"
+#include "csv.h"
+#include "date.h"
+#include "format.h"
+#include "core.h"
 
-  std::cout << "We were passed " << argc
-            << " command line arguments, the first of which was " << argv[0]
-            << std::endl;
-  std::cout << "With a good CLI library, we could use the command line "
-               "arguments to make a useful program."
-            << std::endl;
+int main(int argc, char *argv[]) {
+  argh::parser cmdl(argc, argv); // Initialize the Argh parser
+
+  cmdl.add_params({"-h", "--help"}); // Define help option
+
+  cmdl.add_params({"-i", "--input-file"}); // Define input file option
+
+  if (cmdl[ "--help" ]) {
+    std::cout << "help"; // Display help message
+    return 0;
+  }
+
+  std::string input_filename;
+  if (cmdl[ "-i" ]) { 
+    cmdl( "-i" ) >> input_filename; // Get the input CSV file name
+    std::cout << "Input CSV file: " << input_filename << std::endl;
+  } else {
+    std::cerr << "Error: Input CSV file not specified." << std::endl;
+    return 1;
+  }
+
+
   return 0;
 }
